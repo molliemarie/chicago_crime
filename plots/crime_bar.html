@@ -40,7 +40,7 @@
 
 			var yScale = d3.scaleLinear()
 						   .domain([0, d3.max(dataset, function(d) { return parseInt(d.count); })])
-						   .range([0, h])
+						   .range([h, 0])
 
 			var xScale = d3.scaleLinear()
 						   .domain([0, dataset.length])
