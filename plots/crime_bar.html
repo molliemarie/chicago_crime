@@ -74,7 +74,7 @@
 			   .attr("y", function(d){
 			   	return h - yScale(d.count);
 			   })
-			   .attr("width", w / dataset.length - barPadding)
+			   .attr("width", (w - margin.left) / dataset.length - barPadding)
 			   .attr("height", function(d) {
 			   	return yScale(d.count);
 			   });
