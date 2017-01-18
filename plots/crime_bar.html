@@ -19,7 +19,8 @@
 	<body>
 		<script type="text/javascript">
 
-		var margin = {top: 20, right: 50, bottom: 70, left: 40};
+		var margin = {top: 20, right: 50, bottom: 70, left: 80},
+			padding = 40
 
 		var w = 600 - margin.left - margin.right,
 			h = 400 - margin.top - margin.bottom
@@ -38,9 +39,14 @@
 			dataset = data;
 			console.log(dataset);
 
-			var barScale = d3.scaleLinear()
-								   .domain([0, d3.max(dataset, function(d) { return parseInt(d.count); })])
-								   .range([0, h])
+			var yScale = d3.scaleLinear()
+						   .domain([0, d3.max(dataset, function(d) { return parseInt(d.count); })])
+						   .range([0, h])
+
+			// var xScale = d3.scaleOrdinal()
+			// 			   .domain()
+			// 			   .range()
+
 
 			var max = d3.max(dataset, function(d) { return parseInt(d.count); })
 			console.log(max)
@@ -50,6 +56,10 @@
 			            .attr("width", w)
 			            .attr("height", h);
 
+			var yAxis = d3.axisLeft()
+						  .scale(yScale)
+						  .ticks(5);
+
 			svg.selectAll("rect")
 			   .data(dataset)
 			   .enter()
@@ -58,12 +68,17 @@
 			   	return i * (w / dataset.length);
 			   })
 			   .attr("y", function(d){
-			   	return h - barScale(d.count);
+			   	return h - yScale(d.count);
 			   })
 			   .attr("width", w / dataset.length - barPadding)
 			   .attr("height", function(d) {
-			   	return barScale(d.count);
+			   	return yScale(d.count);
 			   });
+
+			svg.append("g")
+			   .attr("class", "y axis")
+			   .attr("transform", "translate(" + padding + ",0)")
+			   .call(yAxis);
 		});
 
 			
