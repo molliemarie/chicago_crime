@@ -22,8 +22,9 @@
 		var margin = {top: 20, right: 50, bottom: 70, left: 40};
 
 		var w = 600 - margin.left - margin.right,
-			h = 400 - margin.top - margin.bottom
-			barPadding = 1;
+			h = 400 - margin.top - margin.bottom,
+			barPadding = 1,
+			padding = 30;
 
 		var dataset;
 
@@ -40,16 +41,23 @@
 
 			var yScale = d3.scaleLinear()
 						   .domain([0, d3.max(dataset, function(d) { return parseInt(d.count); })])
-						   .range([h, 0])
+						   .range([h - margin.bottom, 0])
 
+			
+			// var xScale = d3.scaleOrdinal()
+			//    .domain([d3.set(dataset.map(function(d) { return d.violation })).values()])
+			//    .rangeRound([margin.left, w]);
 			var xScale = d3.scaleLinear()
 						   .domain([0, dataset.length])
 						   .range([margin.left, w]);
 						   // .padding(0;.5);
 
+			var test_vals = d3.set(dataset.map(function(d) { return d.violation })).values()
+			console.log(test_vals)
+
 			var ordinal = [0, dataset.length]
-			console.log([0,w])
-			console.log(xScale(20))
+			// console.log([0,w])
+			// console.log(xScale(20))
 
 
 			var max = d3.max(dataset, function(d) { return parseInt(d.count); })
@@ -61,8 +69,12 @@
 			            .attr("height", h);
 
 			var yAxis = d3.axisLeft()
-						  .scale(yScale)
-						  .ticks(5);
+						  .scale(yScale);
+						  // .ticks(5);
+
+			var xAxis = d3.axisBottom()
+						  .scale(xScale);
+						  // .ticks(5);
 
 			svg.selectAll("rect")
 			   .data(dataset)
@@ -72,18 +84,26 @@
 			   	return xScale(i);
 			   })
 			   .attr("y", function(d){
-			   	return h - yScale(d.count);
+			   	return yScale(d.count);
 			   })
 			   .attr("width", (w - margin.left) / dataset.length - barPadding)
 			   .attr("height", function(d) {
-			   	return yScale(d.count);
+			   	return h - yScale(d.count) - margin.bottom;
 			   });
 
 			svg.append("g")
 			   .attr("class", "y axis")
 			   .attr("transform", "translate(" + margin.left + ",0)")
 			   .call(yAxis);
-		});
+
+			svg.append("g")
+			   .attr("class", "x axis")
+			   .attr("transform","translate(0," + (h - margin.bottom) + ")")
+			   .call(xAxis)
+			   // .selectAll("text")
+			   // .attr;
+
+					});
 
 			
 		</script>
